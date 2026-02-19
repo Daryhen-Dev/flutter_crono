@@ -9,6 +9,7 @@ import '../models/classic_config.dart';
 import '../models/tabata_config.dart';
 import '../models/custom_config.dart';
 import '../models/workout_record.dart';
+import '../services/audio_service.dart';
 
 class TimerProvider extends ChangeNotifier {
   Timer? _ticker;
@@ -117,11 +118,21 @@ class TimerProvider extends ChangeNotifier {
   }
 
   void _tick() {
+    final audio = AudioService.instance;
+
     if (_state.secondsRemaining > 1) {
-      _state = _state.copyWith(secondsRemaining: _state.secondsRemaining - 1);
+      // Countdown beeps: 3 short at 4,3,2 — 1 long at 1
+      final remaining = _state.secondsRemaining - 1; // value after decrement
+      if (remaining >= 1 && remaining <= 3) {
+        audio.playShortBeep();
+      }
+      _state = _state.copyWith(secondsRemaining: remaining);
       notifyListeners();
       return;
     }
+
+    // Phase ending (secondsRemaining == 1) → long beep
+    audio.playLongBeep();
 
     // Phase ended
     if (_type == TimerType.classic) {
