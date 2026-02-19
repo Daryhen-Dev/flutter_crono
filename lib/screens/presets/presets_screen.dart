@@ -41,28 +41,52 @@ class PresetsScreen extends StatelessWidget {
                 return PresetTile(
                   preset: preset,
                   onTap: () {
+                    // Load config and go straight to timer
                     if (preset.type == TimerType.classic) {
                       context
                           .read<ClassicConfigProvider>()
                           .loadConfig(preset.classicConfig!);
-                      context.push('/classic/config');
                     } else if (preset.type == TimerType.personalizado) {
                       context
                           .read<CustomConfigProvider>()
                           .loadConfig(preset.customConfig!);
-                      context.push('/custom/config');
                     } else {
                       context
                           .read<TabataConfigProvider>()
                           .loadConfig(preset.tabataConfig!);
-                      context.push('/tabata/config');
                     }
+                    context.push('/timer', extra: preset.type);
                   },
-                  onDelete: () =>
-                      context.read<PresetsProvider>().remove(preset.id),
+                  onDelete: () => _confirmDelete(context, preset.id, preset.name),
                 );
               },
             ),
+    );
+  }
+
+  void _confirmDelete(BuildContext context, String id, String name) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Eliminar rutina'),
+        content: Text('¿Eliminar "$name"?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              context.read<PresetsProvider>().remove(id);
+              Navigator.pop(ctx);
+            },
+            child: Text(
+              'Eliminar',
+              style: TextStyle(color: Colors.red.shade300),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

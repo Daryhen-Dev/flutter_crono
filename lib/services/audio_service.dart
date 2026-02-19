@@ -8,24 +8,87 @@ class AudioService {
   AudioService._();
 
   final _player = AudioPlayer();
+  final _musicPlayer = AudioPlayer();
+  final _previewPlayer = AudioPlayer();
   Uint8List? _shortBeep;
   Uint8List? _longBeep;
+  String? _currentMusic;
+
+  static const _musicVolume = 1.0;
+  static const _duckedVolume = 0.15;
 
   void _ensureGenerated() {
     _shortBeep ??= _generateWav(0.12, 880);
     _longBeep ??= _generateWav(0.45, 880);
   }
 
+  /// Play short beep with music ducking.
   Future<void> playShortBeep() async {
     _ensureGenerated();
-    await _player.stop();
-    await _player.play(BytesSource(_shortBeep!));
+    await _duckAndPlay(_shortBeep!, const Duration(milliseconds: 200));
   }
 
+  /// Play long beep with music ducking.
   Future<void> playLongBeep() async {
     _ensureGenerated();
+    await _duckAndPlay(_longBeep!, const Duration(milliseconds: 500));
+  }
+
+  /// Duck music volume, play a beep, then restore volume.
+  Future<void> _duckAndPlay(Uint8List beep, Duration holdDuration) async {
+    final hasMusic = _currentMusic != null;
+    if (hasMusic) {
+      await _musicPlayer.setVolume(_duckedVolume);
+    }
+
     await _player.stop();
-    await _player.play(BytesSource(_longBeep!));
+    await _player.play(BytesSource(beep));
+    await Future.delayed(holdDuration);
+
+    if (hasMusic) {
+      await _musicPlayer.setVolume(_musicVolume);
+    }
+  }
+
+  /// Play music in loop. Pass null to stop music.
+  /// If the same track is already playing, does nothing (no restart).
+  Future<void> playMusic(String? music) async {
+    if (music == null) {
+      await stopMusic();
+      return;
+    }
+    if (_currentMusic == music) return; // already playing this track
+    await _musicPlayer.stop();
+    _currentMusic = music;
+    await _musicPlayer.setVolume(_musicVolume);
+    await _musicPlayer.setReleaseMode(ReleaseMode.loop);
+    await _musicPlayer.play(AssetSource('audio/music/$music'));
+  }
+
+  Future<void> pauseMusic() async {
+    await _musicPlayer.pause();
+  }
+
+  Future<void> resumeMusic() async {
+    if (_currentMusic != null) {
+      await _musicPlayer.resume();
+    }
+  }
+
+  Future<void> stopMusic() async {
+    _currentMusic = null;
+    await _musicPlayer.stop();
+  }
+
+  /// Short preview of an asset (tone or music).
+  Future<void> playPreview(String assetPath) async {
+    await _previewPlayer.stop();
+    await _previewPlayer.setReleaseMode(ReleaseMode.release);
+    await _previewPlayer.play(AssetSource(assetPath));
+    // Stop preview after 3 seconds
+    Future.delayed(const Duration(seconds: 3), () {
+      _previewPlayer.stop();
+    });
   }
 
   Uint8List _generateWav(double durationSec, double frequency) {
@@ -82,5 +145,7 @@ class AudioService {
 
   void dispose() {
     _player.dispose();
+    _musicPlayer.dispose();
+    _previewPlayer.dispose();
   }
 }

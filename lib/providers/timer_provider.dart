@@ -9,6 +9,7 @@ import '../models/classic_config.dart';
 import '../models/tabata_config.dart';
 import '../models/custom_config.dart';
 import '../models/workout_record.dart';
+import '../models/audio_settings.dart';
 import '../services/audio_service.dart';
 
 class TimerProvider extends ChangeNotifier {
@@ -24,12 +25,19 @@ class TimerProvider extends ChangeNotifier {
   // Custom sequence tracking
   int _currentSegmentIndex = 0;
 
+  // Audio settings
+  AudioSettings _audioSettings = const AudioSettings();
+
   // Workout tracking
   DateTime? _startedAt;
   WorkoutRecord? _lastCompletedRecord;
 
   TimerState get state => _state;
   WorkoutRecord? get lastCompletedRecord => _lastCompletedRecord;
+
+  void updateAudioSettings(AudioSettings settings) {
+    _audioSettings = settings;
+  }
 
   void startClassic(ClassicConfig config) {
     _type = TimerType.classic;
@@ -95,6 +103,7 @@ class TimerProvider extends ChangeNotifier {
 
   void pause() {
     _ticker?.cancel();
+    AudioService.instance.pauseMusic();
     _state = _state.copyWith(isRunning: false, isPaused: true);
     notifyListeners();
   }
@@ -103,10 +112,12 @@ class TimerProvider extends ChangeNotifier {
     _state = _state.copyWith(isRunning: true, isPaused: false);
     notifyListeners();
     _startTicker();
+    AudioService.instance.resumeMusic();
   }
 
   void stop() {
     _ticker?.cancel();
+    AudioService.instance.stopMusic();
     _state = const TimerState();
     _type = null;
     notifyListeners();
@@ -241,10 +252,20 @@ class TimerProvider extends ChangeNotifier {
       secondsRemaining: seconds,
       totalPhaseSeconds: seconds,
     );
+
+    final audio = AudioService.instance;
+    if (phase == TimerPhase.work) {
+      audio.playMusic(_audioSettings.workMusic);
+    } else if (phase == TimerPhase.rest ||
+        phase == TimerPhase.tabataRest ||
+        phase == TimerPhase.segmentRest) {
+      audio.playMusic(_audioSettings.restMusic);
+    }
   }
 
   void _finish() {
     _ticker?.cancel();
+    AudioService.instance.stopMusic();
     final now = DateTime.now();
     final totalSeconds = _startedAt != null
         ? now.difference(_startedAt!).inSeconds

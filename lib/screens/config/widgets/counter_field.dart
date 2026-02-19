@@ -23,27 +23,29 @@ class CounterField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          Expanded(
-            child: Text(label, style: Theme.of(context).textTheme.bodyLarge),
-          ),
+          if (label.isNotEmpty)
+            Expanded(
+              child: Text(label, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 18)),
+            ),
+          if (label.isEmpty) const Spacer(),
           IconButton(
             onPressed:
                 value > min ? () => onChanged(value - 1) : null,
-            icon: const Icon(Icons.remove_circle_outline),
+            icon: const Icon(Icons.remove_circle_outline, size: 28),
             color: AppColors.textSecondary,
           ),
           SizedBox(
-            width: 48,
+            width: 56,
             child: Text(
               '$value',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
           IconButton(
             onPressed:
                 value < max ? () => onChanged(value + 1) : null,
-            icon: const Icon(Icons.add_circle_outline),
+            icon: const Icon(Icons.add_circle_outline, size: 28),
             color: AppColors.textSecondary,
           ),
         ],

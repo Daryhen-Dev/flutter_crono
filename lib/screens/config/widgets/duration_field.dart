@@ -58,20 +58,22 @@ class _DurationFieldState extends State<DurationField> {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme.titleLarge?.copyWith(
+    final baseStyle = Theme.of(context).textTheme.headlineSmall?.copyWith(
           fontFeatures: [const FontFeature.tabularFigures()],
         );
-    final dimStyle = textStyle?.copyWith(color: AppColors.textDim);
-    final brightStyle = textStyle?.copyWith(color: AppColors.textPrimary);
+    final dimStyle = baseStyle?.copyWith(color: AppColors.textDim);
+    final brightStyle = baseStyle?.copyWith(color: AppColors.textPrimary);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          Expanded(
-            child:
-                Text(widget.label, style: Theme.of(context).textTheme.bodyLarge),
-          ),
+          if (widget.label.isNotEmpty)
+            Expanded(
+              child:
+                  Text(widget.label, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 18)),
+            ),
+          if (widget.label.isEmpty) const Spacer(),
           _buildWheel(
             controller: _minCtrl,
             itemCount: 100,
@@ -100,11 +102,11 @@ class _DurationFieldState extends State<DurationField> {
     required TextStyle? dimStyle,
   }) {
     return SizedBox(
-      height: 100,
-      width: 48,
+      height: 120,
+      width: 56,
       child: ListWheelScrollView.useDelegate(
         controller: controller,
-        itemExtent: 34,
+        itemExtent: 40,
         perspective: 0.003,
         diameterRatio: 1.2,
         physics: const FixedExtentScrollPhysics(),

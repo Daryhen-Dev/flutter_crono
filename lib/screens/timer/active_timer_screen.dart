@@ -3,15 +3,17 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../models/timer_type.dart';
 import '../../models/timer_phase.dart';
+import '../../models/timer_skin.dart';
 import '../../providers/timer_provider.dart';
 import '../../providers/classic_config_provider.dart';
 import '../../providers/tabata_config_provider.dart';
 import '../../providers/custom_config_provider.dart';
+import '../../providers/audio_settings_provider.dart';
 import '../../providers/history_provider.dart';
-import 'widgets/timer_ring.dart';
-import 'widgets/phase_label.dart';
-import 'widgets/round_indicator.dart';
-import 'widgets/control_buttons.dart';
+import '../../providers/skin_provider.dart';
+import 'skins/classic_skin.dart';
+import 'skins/cyber_grid_skin.dart';
+import 'skins/terminal_skin.dart';
 
 class ActiveTimerScreen extends StatefulWidget {
   final TimerType type;
@@ -28,6 +30,8 @@ class _ActiveTimerScreenState extends State<ActiveTimerScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final timerProvider = context.read<TimerProvider>();
+      final audioSettings = context.read<AudioSettingsProvider>().settings;
+      timerProvider.updateAudioSettings(audioSettings);
       if (widget.type == TimerType.classic) {
         final config = context.read<ClassicConfigProvider>().config;
         timerProvider.startClassic(config);
@@ -44,8 +48,17 @@ class _ActiveTimerScreenState extends State<ActiveTimerScreen> {
   @override
   Widget build(BuildContext context) {
     final timerState = context.watch<TimerProvider>().state;
-    final showTabatas = timerState.totalTabatas > 0;
-    final showSegments = timerState.totalSegments > 0;
+    final skin = context.watch<SkinProvider>().skin;
+
+    void onStop() {
+      final timerProvider = context.read<TimerProvider>();
+      final record = timerProvider.lastCompletedRecord;
+      if (record != null) {
+        context.read<HistoryProvider>().add(record);
+      }
+      timerProvider.stop();
+      context.pop();
+    }
 
     return PopScope(
       canPop: false,
@@ -54,51 +67,26 @@ class _ActiveTimerScreenState extends State<ActiveTimerScreen> {
       },
       child: Scaffold(
         body: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: 24),
-              PhaseLabel(phase: timerState.phase),
-              const Spacer(),
-              TimerRing(
-                progress: timerState.progress,
-                color: timerState.phase.color,
-                child: Text(
-                  timerState.formattedTime,
-                  style: Theme.of(context).textTheme.headlineLarge,
-                ),
+          child: switch (skin) {
+            TimerSkin.classic => ClassicSkin(
+                timerState: timerState,
+                onPause: context.read<TimerProvider>().pause,
+                onResume: context.read<TimerProvider>().resume,
+                onStop: onStop,
               ),
-              const SizedBox(height: 24),
-              RoundIndicator(
-                currentRound: timerState.currentRound,
-                totalRounds: timerState.totalRounds,
-                currentTabata: showTabatas ? timerState.currentTabata : null,
-                totalTabatas: showTabatas ? timerState.totalTabatas : null,
-                currentSegment: showSegments ? timerState.currentSegment : null,
-                totalSegments: showSegments ? timerState.totalSegments : null,
+            TimerSkin.cyberGrid => CyberGridSkin(
+                timerState: timerState,
+                onPause: context.read<TimerProvider>().pause,
+                onResume: context.read<TimerProvider>().resume,
+                onStop: onStop,
               ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: ControlButtons(
-                  isRunning: timerState.isRunning,
-                  isPaused: timerState.isPaused,
-                  isFinished: timerState.phase == TimerPhase.finished,
-                  onPause: context.read<TimerProvider>().pause,
-                  onResume: context.read<TimerProvider>().resume,
-                  onStop: () {
-                    final timerProvider = context.read<TimerProvider>();
-                    final record = timerProvider.lastCompletedRecord;
-                    if (record != null) {
-                      context.read<HistoryProvider>().add(record);
-                    }
-                    timerProvider.stop();
-                    context.pop();
-                  },
-                ),
+            TimerSkin.terminal => TerminalSkin(
+                timerState: timerState,
+                onPause: context.read<TimerProvider>().pause,
+                onResume: context.read<TimerProvider>().resume,
+                onStop: onStop,
               ),
-              const SizedBox(height: 48),
-            ],
-          ),
+          },
         ),
       ),
     );

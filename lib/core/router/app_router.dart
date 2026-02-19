@@ -7,6 +7,7 @@ import '../../screens/config/custom_config_screen.dart';
 import '../../screens/timer/active_timer_screen.dart';
 import '../../screens/presets/presets_screen.dart';
 import '../../screens/history/history_screen.dart';
+import '../../screens/audio/audio_settings_screen.dart';
 
 class AppRouter {
   AppRouter._();
@@ -44,6 +45,10 @@ class AppRouter {
       GoRoute(
         path: '/history',
         builder: (context, state) => const HistoryScreen(),
+      ),
+      GoRoute(
+        path: '/audio-settings',
+        builder: (context, state) => const AudioSettingsScreen(),
       ),
     ],
   );
