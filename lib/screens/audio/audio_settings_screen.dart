@@ -14,12 +14,13 @@ class AudioSettingsScreen extends StatefulWidget {
 class _AudioSettingsScreenState extends State<AudioSettingsScreen> {
   int? _expandedIndex;
 
-  static const _musicFiles = [
-    'soundoffreedom-808-beat-486241.mp3',
-    'the_mountain-sports-rock-rock-background-449412.mp3',
-    'u_fqkekalnfb-break-the-apex-476114.mp3',
-    'vibehorn-cozy-lofi-relax-468509.mp3',
+  static const _workFiles = [
+    'work/soundoffreedom-808-beat-486241.mp3',
+    'work/the_mountain-sports-rock-rock-background-449412.mp3',
+    'work/u_fqkekalnfb-break-the-apex-476114.mp3',
   ];
+
+  static const _restFiles = ['rest/vibehorn-cozy-lofi-relax-468509.mp3'];
 
   void _toggle(int index) {
     setState(() {
@@ -27,8 +28,9 @@ class _AudioSettingsScreenState extends State<AudioSettingsScreen> {
     });
   }
 
-  String _displayName(String filename) {
-    // Remove extension, replace hyphens/underscores with spaces, capitalize first letter
+  String _displayName(String path) {
+    // Strip folder prefix, remove extension, humanize
+    final filename = path.contains('/') ? path.split('/').last : path;
     final name = filename
         .replaceAll(RegExp(r'\.[^.]+$'), '')
         .replaceAll(RegExp(r'[-_]'), ' ')
@@ -49,7 +51,7 @@ class _AudioSettingsScreenState extends State<AudioSettingsScreen> {
         padding: const EdgeInsets.all(16),
         children: [
           _AudioCard(
-            label: 'Música de trabajo',
+            label: 'Canción de trabajo',
             value: settings.workMusic != null
                 ? _displayName(settings.workMusic!)
                 : 'Sin música',
@@ -58,12 +60,12 @@ class _AudioSettingsScreenState extends State<AudioSettingsScreen> {
             isExpanded: _expandedIndex == 0,
             onTap: () => _toggle(0),
             child: _MusicSelector(
-              files: _musicFiles,
+              files: _workFiles,
               selected: settings.workMusic,
               onSelected: (file) {
                 provider.setWorkMusic(file);
                 if (file != null) {
-                  AudioService.instance.playPreview('audio/music/$file');
+                  AudioService.instance.playPreview('audio/$file');
                 }
               },
               displayName: _displayName,
@@ -71,7 +73,7 @@ class _AudioSettingsScreenState extends State<AudioSettingsScreen> {
           ),
           const SizedBox(height: 12),
           _AudioCard(
-            label: 'Música de descanso',
+            label: 'Canción de descanso',
             value: settings.restMusic != null
                 ? _displayName(settings.restMusic!)
                 : 'Sin música',
@@ -80,12 +82,12 @@ class _AudioSettingsScreenState extends State<AudioSettingsScreen> {
             isExpanded: _expandedIndex == 1,
             onTap: () => _toggle(1),
             child: _MusicSelector(
-              files: _musicFiles,
+              files: _restFiles,
               selected: settings.restMusic,
               onSelected: (file) {
                 provider.setRestMusic(file);
                 if (file != null) {
-                  AudioService.instance.playPreview('audio/music/$file');
+                  AudioService.instance.playPreview('audio/$file');
                 }
               },
               displayName: _displayName,
@@ -126,11 +128,8 @@ class _AudioCard extends StatelessWidget {
           InkWell(
             onTap: onTap,
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.1)),
               child: Row(
                 children: [
                   Icon(icon, color: color, size: 28),
@@ -141,9 +140,7 @@ class _AudioCard extends StatelessWidget {
                       children: [
                         Text(
                           label,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
+                          style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(fontSize: 16, color: color),
                         ),
                         const SizedBox(height: 4),
@@ -203,11 +200,13 @@ class _MusicSelector extends StatelessWidget {
           isSelected: selected == null,
           onTap: () => onSelected(null),
         ),
-        ...files.map((file) => _OptionTile(
-              label: displayName(file),
-              isSelected: selected == file,
-              onTap: () => onSelected(file),
-            )),
+        ...files.map(
+          (file) => _OptionTile(
+            label: displayName(file),
+            isSelected: selected == file,
+            onTap: () => onSelected(file),
+          ),
+        ),
       ],
     );
   }

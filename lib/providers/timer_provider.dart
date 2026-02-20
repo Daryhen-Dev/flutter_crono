@@ -130,22 +130,22 @@ class TimerProvider extends ChangeNotifier {
 
   void _tick() {
     final audio = AudioService.instance;
+    final remaining = _state.secondsRemaining - 1;
 
-    if (_state.secondsRemaining > 1) {
-      // Countdown beeps: 3 short at 4,3,2 — 1 long at 1
-      final remaining = _state.secondsRemaining - 1; // value after decrement
-      if (remaining >= 1 && remaining <= 3) {
+    if (remaining > 0) {
+      // Still counting down
+      if (remaining >= 2 && remaining <= 4) {
         audio.playShortBeep();
+      } else if (remaining == 1) {
+        // Long beep 1s before transition — gives time to hear it fully
+        audio.playLongBeep();
       }
       _state = _state.copyWith(secondsRemaining: remaining);
       notifyListeners();
       return;
     }
 
-    // Phase ending (secondsRemaining == 1) → long beep
-    audio.playLongBeep();
-
-    // Phase ended
+    // remaining == 0: phase transition (beep already played last tick)
     if (_type == TimerType.classic) {
       _advanceClassic();
     } else if (_type == TimerType.personalizado) {

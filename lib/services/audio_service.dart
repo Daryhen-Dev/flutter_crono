@@ -13,40 +13,60 @@ class AudioService {
   Uint8List? _shortBeep;
   Uint8List? _longBeep;
   String? _currentMusic;
+  bool _playerContextSet = false;
 
   static const _musicVolume = 1.0;
-  static const _duckedVolume = 0.15;
+  static const _duckedVolume = 0.25;
 
   void _ensureGenerated() {
     _shortBeep ??= _generateWav(0.12, 880);
     _longBeep ??= _generateWav(0.45, 880);
   }
 
+  /// Configure beep player to not steal audio focus from music player.
+  Future<void> _ensurePlayerContext() async {
+    if (_playerContextSet) return;
+    _playerContextSet = true;
+    await _player.setAudioContext(
+      AudioContext(
+        android: const AudioContextAndroid(audioFocus: AndroidAudioFocus.none),
+        iOS: AudioContextIOS(
+          category: AVAudioSessionCategory.playback,
+          options: {AVAudioSessionOptions.mixWithOthers},
+        ),
+      ),
+    );
+  }
+
   /// Play short beep with music ducking.
   Future<void> playShortBeep() async {
     _ensureGenerated();
-    await _duckAndPlay(_shortBeep!, const Duration(milliseconds: 200));
+    if (_currentMusic != null) {
+      await _ensurePlayerContext();
+      await _musicPlayer.setVolume(_duckedVolume);
+      await _player.stop();
+      await _player.play(BytesSource(_shortBeep!));
+      await Future.delayed(const Duration(milliseconds: 200));
+      await _musicPlayer.setVolume(_musicVolume);
+    } else {
+      await _player.stop();
+      await _player.play(BytesSource(_shortBeep!));
+    }
   }
 
   /// Play long beep with music ducking.
   Future<void> playLongBeep() async {
     _ensureGenerated();
-    await _duckAndPlay(_longBeep!, const Duration(milliseconds: 500));
-  }
-
-  /// Duck music volume, play a beep, then restore volume.
-  Future<void> _duckAndPlay(Uint8List beep, Duration holdDuration) async {
-    final hasMusic = _currentMusic != null;
-    if (hasMusic) {
+    if (_currentMusic != null) {
+      await _ensurePlayerContext();
       await _musicPlayer.setVolume(_duckedVolume);
-    }
-
-    await _player.stop();
-    await _player.play(BytesSource(beep));
-    await Future.delayed(holdDuration);
-
-    if (hasMusic) {
+      await _player.stop();
+      await _player.play(BytesSource(_longBeep!));
+      await Future.delayed(const Duration(milliseconds: 500));
       await _musicPlayer.setVolume(_musicVolume);
+    } else {
+      await _player.stop();
+      await _player.play(BytesSource(_longBeep!));
     }
   }
 
@@ -57,12 +77,12 @@ class AudioService {
       await stopMusic();
       return;
     }
-    if (_currentMusic == music) return; // already playing this track
+    if (_currentMusic == music) return;
     await _musicPlayer.stop();
     _currentMusic = music;
     await _musicPlayer.setVolume(_musicVolume);
     await _musicPlayer.setReleaseMode(ReleaseMode.loop);
-    await _musicPlayer.play(AssetSource('audio/music/$music'));
+    await _musicPlayer.play(AssetSource('audio/$music'));
   }
 
   Future<void> pauseMusic() async {
@@ -85,7 +105,6 @@ class AudioService {
     await _previewPlayer.stop();
     await _previewPlayer.setReleaseMode(ReleaseMode.release);
     await _previewPlayer.play(AssetSource(assetPath));
-    // Stop preview after 3 seconds
     Future.delayed(const Duration(seconds: 3), () {
       _previewPlayer.stop();
     });
@@ -129,8 +148,10 @@ class AudioService {
       } else if (i > numSamples - fadeSamples) {
         amp *= (numSamples - i) / fadeSamples;
       }
-      final sample =
-          (sin(2 * pi * frequency * t) * amp * 32767).toInt().clamp(-32768, 32767);
+      final sample = (sin(2 * pi * frequency * t) * amp * 32767).toInt().clamp(
+        -32768,
+        32767,
+      );
       bytes.setInt16(44 + i * 2, sample, Endian.little);
     }
 
