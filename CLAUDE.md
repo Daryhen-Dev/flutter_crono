@@ -4,12 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Flutter interval timer app for workouts (Clásico, Tabata, Personalizado modes). Supports visual skins (Classic dark, Cyber Grid, Terminal/Matrix). Spanish UI language.
+**Tip Tap Workout** — Flutter interval timer app for workouts. Spanish UI language.
 
-- **SDK constraints:** Dart >=3.9.2, Flutter >=3.18.0
+- **Timer modes:** Clásico (rounds), Tabata (HIIT intervals), Personalizado (sequence builder mixing Clásico/Tabata blocks)
+- **Visual skins:** Classic (dark/lime), Cyber Grid (cyan neon grid), Terminal (Matrix rain)
+- **SDK:** Dart >=3.9.2
 - **State management:** Provider (`ChangeNotifierProvider`)
-- **Routing:** GoRouter
+- **Routing:** GoRouter (routes pass `TimerType` via `state.extra`)
 - **Persistence:** SharedPreferences via `StorageService`
+- **Audio:** `audioplayers` package — WAV beeps generated in memory, MP3 music from assets
 - **Linting:** `flutter_lints`
 
 ## Common Commands
@@ -24,37 +27,50 @@ flutter pub get                       # Get dependencies
 
 ## Architecture
 
-```
-lib/
-├── main.dart                    # App entry, providers, MaterialApp.router, skin shell
-├── core/
-│   ├── router/app_router.dart   # GoRouter route definitions
-│   └── theme/
-│       ├── app_colors.dart      # Phase colors (work, rest, preparation)
-│       └── app_theme.dart       # AppTheme.dark/cyber/terminal, CyberColors, TerminalColors
-├── models/                      # Data classes: configs, TimerState, TimerPhase, TimerSkin, etc.
-├── providers/                   # ChangeNotifiers: timer, config (classic/tabata/custom), skin, presets, history
-├── screens/
-│   ├── config/                  # Config screens per timer type + shared widgets (DurationField, CounterField)
-│   ├── timer/
-│   │   ├── active_timer_screen.dart  # Routes to skin widgets based on SkinProvider
-│   │   ├── skins/               # ClassicSkin, CyberGridSkin, TerminalSkin
-│   │   └── widgets/             # TimerRing, PhaseLabel, RoundIndicator, ControlButtons
-│   ├── home/                    # Home screen with skin selector
-│   ├── history/                 # Workout history with filters
-│   └── presets/                 # Saved routine presets
-└── services/
-    ├── audio_service.dart       # Beep/sound feedback
-    └── storage_service.dart     # SharedPreferences wrapper
-```
+- `main.dart` — Entry point, all providers registered via `MultiProvider`, `MaterialApp.router` with skin shell
+- `core/router/app_router.dart` — GoRouter route definitions
+- `core/theme/` — `AppColors` (phase colors), `AppTheme.dark/cyber/terminal`
+- `models/` — Immutable data classes: configs, `TimerState`, `TimerPhase`, `TimerSkin`, `AudioSettings`, `Preset`, `WorkoutRecord`
+- `providers/` — ChangeNotifiers: `TimerProvider` (tick logic), config providers (classic/tabata/custom), `SkinProvider`, `AudioSettingsProvider`, `PresetsProvider`, `HistoryProvider`
+- `screens/config/` — Config screens per timer type + shared `DurationField`/`CounterField` widgets
+- `screens/timer/` — `ActiveTimerScreen` routes to skin widgets; `skins/` has self-contained skin widgets
+- `screens/audio/` — `AudioSettingsScreen` for music selection per phase
+- `services/audio_service.dart` — Singleton: beep generation, music playback, ducking, preview
+- `services/storage_service.dart` — SharedPreferences wrapper
 
 ### Skin System
 
-Skins are applied globally via `_SkinShell` in `main.dart` which wraps the app in a `Theme` widget + background (grid painter for Cyber, Matrix rain for Terminal). `MaterialApp.router` is built once with a static theme to avoid GlobalKey conflicts — skin switching happens via `Theme(data: ...)` inside the builder.
+`_SkinShell` in `main.dart` wraps the app in `Theme(data: ...)` + background painters. `MaterialApp.router` is built once with a static theme — skin switching happens inside the builder to avoid GoRouter `GlobalKey` conflicts.
 
-Each timer skin (`lib/screens/timer/skins/`) is a self-contained widget receiving `TimerState` + callbacks (`onPause`, `onResume`, `onStop`).
+Each timer skin (`screens/timer/skins/`) receives `TimerState` + callbacks (`onPause`, `onResume`, `onStop`).
 
-### Config Screens
+### Audio System
 
-- **ClassicConfigScreen**: Expandable cards with centered scroll pickers (ListWheelScrollView)
-- **TabataConfigScreen / CustomConfigScreen**: Use shared `DurationField` and `CounterField` widgets
+`AudioService` is a singleton with three `AudioPlayer` instances:
+- `_player` — beeps (WAV generated in memory, 880Hz sine wave)
+- `_musicPlayer` — background music (MP3 assets, looped)
+- `_previewPlayer` — short previews in settings screen
+
+**Concurrent playback:** Beeps play over music using `AndroidAudioFocus.none` (Android) and `mixWithOthers` (iOS). Audio context is set lazily via `_ensurePlayerContext()` — must NOT be set in the constructor or it breaks playback.
+
+**Ducking:** When a beep plays, music volume drops to `_duckedVolume` then restores to `_musicVolume`.
+
+**Asset folders:** `assets/audio/work/` (work phase music), `assets/audio/rest/` (rest phase music), `assets/audio/tones/` (pending).
+
+Music file lists are hardcoded in `AudioSettingsScreen` — update `_workFiles`/`_restFiles` when adding new MP3s.
+
+### Timer Flow
+
+1. Config screen sets values in config provider → navigates to `/timer` with `TimerType` as `extra`
+2. `ActiveTimerScreen.initState()` reads config + audio settings providers, calls `TimerProvider.startClassic/Tabata/Custom()`
+3. `TimerProvider._tick()` counts down, plays beeps at 4/3/2s (short) and 1s (long) before phase transitions
+4. On phase transition (`_enterPhase`), music switches between work/rest tracks
+5. On finish, `WorkoutRecord` is created and saved to history
+
+### Nullable copyWith Pattern
+
+`AudioSettings.copyWith` uses `String? Function()?` wrapper for nullable fields to distinguish "not provided" from "set to null":
+```dart
+copyWith({ String? Function()? workMusic }) =>
+  AudioSettings(workMusic: workMusic != null ? workMusic() : this.workMusic)
+```

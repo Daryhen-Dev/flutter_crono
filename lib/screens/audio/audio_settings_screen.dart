@@ -15,12 +15,26 @@ class _AudioSettingsScreenState extends State<AudioSettingsScreen> {
   int? _expandedIndex;
 
   static const _workFiles = [
-    'work/soundoffreedom-808-beat-486241.mp3',
-    'work/the_mountain-sports-rock-rock-background-449412.mp3',
-    'work/u_fqkekalnfb-break-the-apex-476114.mp3',
+    'work/asphalt heartbeat.mp3',
+    'work/break the apex.mp3',
+    'work/gym music soundtrack edm bass boost workout.mp3',
+    'work/nickpanek flight of the war drone intense aggressive instrumental.mp3',
+    'work/nickpanek heavy german instrumental.mp3',
+    'work/no brakes on tomorrow.mp3',
+    'work/sound off reedom 808 beat.mp3',
+    'work/the mountain sports rock.mp3',
+    'work/trap phonk gym darker amp brutal.mp3',
+    'work/vibedepot trap.mp3',
+    'work/voltage under skin.mp3',
   ];
 
-  static const _restFiles = ['rest/vibehorn-cozy-lofi-relax-468509.mp3'];
+  static const _restFiles = [
+    'rest/alanajordan hip-hop jazz relaxig.mp3',
+    'rest/moonpub acoustic kids toy relaxing.mp3',
+    'rest/paulyudin sad sad music.mp3',
+    'rest/poorartistt lofi hip-hop.mp3',
+    'rest/vibehorn cozy lofi.mp3',
+  ];
 
   void _toggle(int index) {
     setState(() {
