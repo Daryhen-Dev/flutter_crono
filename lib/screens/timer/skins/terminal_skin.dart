@@ -37,7 +37,8 @@ class TerminalSkin extends StatelessWidget {
                   flex: 2,
                   child: _InfoBox(
                     label: 'RONDA',
-                    value: '${timerState.currentRound}/${timerState.totalRounds}',
+                    value:
+                        '${timerState.currentRound}/${timerState.totalRounds}',
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -84,58 +85,58 @@ class TerminalSkin extends StatelessWidget {
           // Main timer container
           Expanded(
             child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-            decoration: BoxDecoration(
-              color: TerminalColors.surface,
-              borderRadius: BorderRadius.circular(4),
-              border: Border.all(
-                color: TerminalColors.green.withValues(alpha: 0.5),
-                width: 2,
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+              decoration: BoxDecoration(
+                color: TerminalColors.surface,
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(
+                  color: TerminalColors.green.withValues(alpha: 0.5),
+                  width: 2,
+                ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Label
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'TIEMPO RESTANTE',
+                      style: TextStyle(
+                        color: TerminalColors.green.withValues(alpha: 0.6),
+                        fontSize: 13,
+                        fontFamily: 'monospace',
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Time display
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      timerState.formattedTime,
+                      maxLines: 1,
+                      style: const TextStyle(
+                        color: TerminalColors.green,
+                        fontSize: 72,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'monospace',
+                        letterSpacing: 6,
+                        height: 1,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  // Dotted progress bar
+                  _DottedProgressBar(
+                    progress: timerState.progress,
+                    color: timerState.phase.color,
+                  ),
+                ],
               ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Label
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'TIEMPO RESTANTE',
-                    style: TextStyle(
-                      color: TerminalColors.green.withValues(alpha: 0.6),
-                      fontSize: 13,
-                      fontFamily: 'monospace',
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                // Time display
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    timerState.formattedTime,
-                    maxLines: 1,
-                    style: const TextStyle(
-                      color: TerminalColors.green,
-                      fontSize: 72,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'monospace',
-                      letterSpacing: 6,
-                      height: 1,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                // Dotted progress bar
-                _DottedProgressBar(
-                  progress: timerState.progress,
-                  color: timerState.phase.color,
-                ),
-              ],
-            ),
-          ),
           ),
           const SizedBox(height: 24),
           // Buttons
@@ -149,9 +150,7 @@ class TerminalSkin extends StatelessWidget {
                   children: [
                     Expanded(
                       child: _TerminalButton(
-                        label: timerState.isRunning
-                            ? '[PAUSA]'
-                            : '[REANUDAR]',
+                        label: timerState.isRunning ? '[PAUSA]' : '[REANUDAR]',
                         onTap: timerState.isRunning ? onPause : onResume,
                         filled: true,
                       ),
@@ -177,10 +176,7 @@ class _InfoBox extends StatelessWidget {
   final String label;
   final String value;
 
-  const _InfoBox({
-    required this.label,
-    required this.value,
-  });
+  const _InfoBox({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -188,9 +184,7 @@ class _InfoBox extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(
-          color: TerminalColors.green.withValues(alpha: 0.35),
-        ),
+        border: Border.all(color: TerminalColors.green.withValues(alpha: 0.35)),
         color: TerminalColors.surface,
       ),
       child: Column(
@@ -250,10 +244,7 @@ class _TerminalButton extends StatelessWidget {
           color: filled
               ? TerminalColors.green.withValues(alpha: 0.15)
               : Colors.transparent,
-          border: Border.all(
-            color: TerminalColors.green,
-            width: 1.5,
-          ),
+          border: Border.all(color: TerminalColors.green, width: 1.5),
         ),
         child: Text(
           label,
@@ -274,10 +265,7 @@ class _DottedProgressBar extends StatelessWidget {
   final double progress;
   final Color color;
 
-  const _DottedProgressBar({
-    required this.progress,
-    required this.color,
-  });
+  const _DottedProgressBar({required this.progress, required this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -286,8 +274,7 @@ class _DottedProgressBar extends StatelessWidget {
         const dotSize = 6.0;
         const dotSpacing = 4.0;
         final totalWidth = constraints.maxWidth;
-        final dotCount =
-            (totalWidth / (dotSize + dotSpacing)).floor();
+        final dotCount = (totalWidth / (dotSize + dotSpacing)).floor();
         final filledCount = (dotCount * progress).round();
 
         return Row(

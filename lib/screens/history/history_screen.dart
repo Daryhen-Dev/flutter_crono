@@ -84,14 +84,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.history,
-                            size: 48, color: AppColors.textDim),
+                        const Icon(
+                          Icons.history,
+                          size: 48,
+                          color: AppColors.textDim,
+                        ),
                         const SizedBox(height: 8),
-                        Text('Sin entrenamientos',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(color: AppColors.textDim)),
+                        Text(
+                          'Sin entrenamientos',
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: AppColors.textDim),
+                        ),
                       ],
                     ),
                   )
@@ -140,7 +143,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   List<MapEntry<String, List<WorkoutRecord>>> _groupByDay(
-      List<WorkoutRecord> records) {
+    List<WorkoutRecord> records,
+  ) {
     final map = <String, List<WorkoutRecord>>{};
     for (final r in records) {
       final key = _dayLabel(r.completedAt);
@@ -165,8 +169,19 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   String _monthName(int month) {
     const names = [
-      '', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+      '',
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre',
     ];
     return names[month];
   }

@@ -35,20 +35,18 @@ class RoundIndicator extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             'Tabata $currentTabata / $totalTabatas',
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(color: AppColors.tabataRest),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppColors.tabataRest),
           ),
         ],
         if (showSegment) ...[
           const SizedBox(height: 4),
           Text(
             'Bloque $currentSegment / $totalSegments',
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(color: AppColors.preparation),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppColors.preparation),
           ),
         ],
       ],

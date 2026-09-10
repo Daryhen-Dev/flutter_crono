@@ -87,8 +87,7 @@ class CyberGridSkin extends StatelessWidget {
           Expanded(
             child: Container(
               width: double.infinity,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
               decoration: BoxDecoration(
                 color: CyberColors.background.withValues(alpha: 0.8),
                 borderRadius: BorderRadius.circular(16),
@@ -141,10 +140,10 @@ class CyberGridSkin extends StatelessWidget {
                       height: 12,
                       child: LinearProgressIndicator(
                         value: timerState.progress,
-                        backgroundColor:
-                            CyberColors.cyan.withValues(alpha: 0.15),
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(phaseColor),
+                        backgroundColor: CyberColors.cyan.withValues(
+                          alpha: 0.15,
+                        ),
+                        valueColor: AlwaysStoppedAnimation<Color>(phaseColor),
                       ),
                     ),
                   ),
@@ -192,10 +191,7 @@ class _CyberInfoBox extends StatelessWidget {
   final String label;
   final String value;
 
-  const _CyberInfoBox({
-    required this.label,
-    required this.value,
-  });
+  const _CyberInfoBox({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -203,9 +199,7 @@ class _CyberInfoBox extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: CyberColors.cyan.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: CyberColors.cyan.withValues(alpha: 0.3)),
         color: CyberColors.background.withValues(alpha: 0.6),
         boxShadow: [
           BoxShadow(

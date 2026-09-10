@@ -35,37 +35,36 @@ class WorkoutRecordTile extends StatelessWidget {
           color: color.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Icon(
-          icon,
-          color: color,
-          size: 18,
-        ),
+        child: Icon(icon, color: color, size: 18),
       ),
-      title: Text(record.type.displayName,
-          style: Theme.of(context).textTheme.bodyLarge),
+      title: Text(
+        record.type.displayName,
+        style: Theme.of(context).textTheme.bodyLarge,
+      ),
       subtitle: Text(
         record.type == TimerType.personalizado
             ? '${record.tabatasCompleted} bloques'
             : '${record.roundsCompleted} rondas${record.tabatasCompleted > 0 ? ' · ${record.tabatasCompleted} tabatas' : ''}',
-        style: Theme.of(context)
-            .textTheme
-            .bodySmall
-            ?.copyWith(color: AppColors.textDim),
+        style: Theme.of(
+          context,
+        ).textTheme.bodySmall?.copyWith(color: AppColors.textDim),
       ),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text(hour,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(color: AppColors.textSecondary)),
-          Text(_formatDuration(record.totalSeconds),
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(color: AppColors.accent)),
+          Text(
+            hour,
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
+          ),
+          Text(
+            _formatDuration(record.totalSeconds),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: AppColors.accent),
+          ),
         ],
       ),
     );

@@ -21,12 +21,14 @@ class SummaryCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _stat(context, Icons.fitness_center, '$totalSessions',
-                'sesiones'),
-            _stat(context, Icons.timer, _formatDuration(totalSeconds),
-                'total'),
-            _stat(context, Icons.bar_chart, _formatDuration(avgSeconds),
-                'promedio'),
+            _stat(context, Icons.fitness_center, '$totalSessions', 'sesiones'),
+            _stat(context, Icons.timer, _formatDuration(totalSeconds), 'total'),
+            _stat(
+              context,
+              Icons.bar_chart,
+              _formatDuration(avgSeconds),
+              'promedio',
+            ),
           ],
         ),
       ),
@@ -34,21 +36,27 @@ class SummaryCard extends StatelessWidget {
   }
 
   Widget _stat(
-      BuildContext context, IconData icon, String value, String label) {
+    BuildContext context,
+    IconData icon,
+    String value,
+    String label,
+  ) {
     return Column(
       children: [
         Icon(icon, color: AppColors.accent, size: 20),
         const SizedBox(height: 4),
-        Text(value,
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(color: AppColors.textPrimary)),
-        Text(label,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.copyWith(color: AppColors.textDim)),
+        Text(
+          value,
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(color: AppColors.textPrimary),
+        ),
+        Text(
+          label,
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: AppColors.textDim),
+        ),
       ],
     );
   }

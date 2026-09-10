@@ -34,11 +34,17 @@ class _TabataConfigScreenState extends State<TabataConfigScreen> {
     final config = provider.config;
 
     // Total time = preparation + tabatas * (rounds * work + (rounds-1) * rest) + (tabatas-1) * tabataRest
-    final singleTabata = config.roundCount * config.workSeconds +
-        (config.roundCount > 1 ? (config.roundCount - 1) * config.restSeconds : 0);
-    final totalSeconds = config.preparationSeconds +
+    final singleTabata =
+        config.roundCount * config.workSeconds +
+        (config.roundCount > 1
+            ? (config.roundCount - 1) * config.restSeconds
+            : 0);
+    final totalSeconds =
+        config.preparationSeconds +
         config.tabataCount * singleTabata +
-        (config.tabataCount > 1 ? (config.tabataCount - 1) * config.tabataRestSeconds : 0);
+        (config.tabataCount > 1
+            ? (config.tabataCount - 1) * config.tabataRestSeconds
+            : 0);
 
     return Scaffold(
       appBar: AppBar(
@@ -132,9 +138,7 @@ class _TabataConfigScreenState extends State<TabataConfigScreen> {
             ),
           ),
           const SizedBox(height: 24),
-          _TotalTimeBanner(
-            formattedTime: _formatTime(totalSeconds),
-          ),
+          _TotalTimeBanner(formattedTime: _formatTime(totalSeconds)),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => context.push('/timer', extra: TimerType.tabata),
@@ -165,17 +169,16 @@ class _TabataConfigScreenState extends State<TabataConfigScreen> {
             onPressed: () {
               final name = nameController.text.trim();
               if (name.isEmpty) return;
-              final config =
-                  context.read<TabataConfigProvider>().config;
+              final config = context.read<TabataConfigProvider>().config;
               context.read<PresetsProvider>().add(
-                    name: name,
-                    type: TimerType.tabata,
-                    config: config.toJson(),
-                  );
-              Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Rutina guardada')),
+                name: name,
+                type: TimerType.tabata,
+                config: config.toJson(),
               );
+              Navigator.pop(ctx);
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Rutina guardada')));
             },
             child: const Text('Guardar'),
           ),
@@ -214,9 +217,7 @@ class _ConfigCard extends StatelessWidget {
             onTap: onTap,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
-              ),
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.1)),
               child: Row(
                 children: [
                   Icon(icon, color: color, size: 28),
@@ -227,16 +228,17 @@ class _ConfigCard extends StatelessWidget {
                       children: [
                         Text(
                           label,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                fontSize: 16,
-                                color: color,
-                              ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(fontSize: 16, color: color),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           value,
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                fontFeatures: [const FontFeature.tabularFigures()],
+                          style: Theme.of(context).textTheme.headlineSmall
+                              ?.copyWith(
+                                fontFeatures: [
+                                  const FontFeature.tabularFigures(),
+                                ],
                               ),
                         ),
                       ],
@@ -245,10 +247,7 @@ class _ConfigCard extends StatelessWidget {
                   AnimatedRotation(
                     turns: isExpanded ? 0.5 : 0,
                     duration: const Duration(milliseconds: 200),
-                    child: Icon(
-                      Icons.keyboard_arrow_down,
-                      color: color,
-                    ),
+                    child: Icon(Icons.keyboard_arrow_down, color: color),
                   ),
                 ],
               ),
@@ -323,8 +322,8 @@ class _CenteredDurationPickerState extends State<_CenteredDurationPicker> {
   @override
   Widget build(BuildContext context) {
     final baseStyle = Theme.of(context).textTheme.headlineSmall?.copyWith(
-          fontFeatures: [const FontFeature.tabularFigures()],
-        );
+      fontFeatures: [const FontFeature.tabularFigures()],
+    );
     final dimStyle = baseStyle?.copyWith(color: AppColors.textDim);
     final brightStyle = baseStyle?.copyWith(color: AppColors.textPrimary);
 
@@ -389,34 +388,29 @@ class _CenteredDurationPickerState extends State<_CenteredDurationPicker> {
 class _CenteredCounterPicker extends StatefulWidget {
   final int value;
   final ValueChanged<int> onChanged;
-  final int min;
-  final int max;
 
-  const _CenteredCounterPicker({
-    required this.value,
-    required this.onChanged,
-    this.min = 1,
-    this.max = 99,
-  });
+  const _CenteredCounterPicker({required this.value, required this.onChanged});
 
   @override
   State<_CenteredCounterPicker> createState() => _CenteredCounterPickerState();
 }
 
 class _CenteredCounterPickerState extends State<_CenteredCounterPicker> {
+  static const _min = 1;
+  static const _max = 99;
   late FixedExtentScrollController _ctrl;
 
   @override
   void initState() {
     super.initState();
-    _ctrl = FixedExtentScrollController(initialItem: widget.value - widget.min);
+    _ctrl = FixedExtentScrollController(initialItem: widget.value - _min);
   }
 
   @override
   void didUpdateWidget(_CenteredCounterPicker old) {
     super.didUpdateWidget(old);
     if (old.value != widget.value) {
-      final target = widget.value - widget.min;
+      final target = widget.value - _min;
       if (_ctrl.selectedItem != target) _ctrl.jumpToItem(target);
     }
   }
@@ -430,11 +424,11 @@ class _CenteredCounterPickerState extends State<_CenteredCounterPicker> {
   @override
   Widget build(BuildContext context) {
     final baseStyle = Theme.of(context).textTheme.headlineSmall?.copyWith(
-          fontFeatures: [const FontFeature.tabularFigures()],
-        );
+      fontFeatures: [const FontFeature.tabularFigures()],
+    );
     final dimStyle = baseStyle?.copyWith(color: AppColors.textDim);
     final brightStyle = baseStyle?.copyWith(color: AppColors.textPrimary);
-    final itemCount = widget.max - widget.min + 1;
+    const itemCount = _max - _min + 1;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -450,12 +444,12 @@ class _CenteredCounterPickerState extends State<_CenteredCounterPicker> {
             physics: const FixedExtentScrollPhysics(),
             overAndUnderCenterOpacity: 0.3,
             onSelectedItemChanged: (index) {
-              widget.onChanged(index + widget.min);
+              widget.onChanged(index + _min);
             },
             childDelegate: ListWheelChildBuilderDelegate(
               childCount: itemCount,
               builder: (context, index) {
-                final val = index + widget.min;
+                final val = index + _min;
                 final isSelected =
                     _ctrl.hasClients && _ctrl.selectedItem == index;
                 return Center(
@@ -485,18 +479,12 @@ class _TotalTimeBanner extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.accent.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.accent.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: AppColors.accent.withValues(alpha: 0.2)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.schedule,
-            color: AppColors.accent,
-            size: 28,
-          ),
+          Icon(Icons.schedule, color: AppColors.accent, size: 28),
           const SizedBox(width: 14),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -514,10 +502,10 @@ class _TotalTimeBanner extends StatelessWidget {
               Text(
                 formattedTime,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: AppColors.accent,
-                      fontWeight: FontWeight.w800,
-                      fontFeatures: [const FontFeature.tabularFigures()],
-                    ),
+                  color: AppColors.accent,
+                  fontWeight: FontWeight.w800,
+                  fontFeatures: [const FontFeature.tabularFigures()],
+                ),
               ),
             ],
           ),

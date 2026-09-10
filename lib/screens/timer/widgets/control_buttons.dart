@@ -60,10 +60,7 @@ class ControlButtons extends StatelessWidget {
               padding: EdgeInsets.zero,
               minimumSize: Size.zero,
             ),
-            child: Icon(
-              isRunning ? Icons.pause : Icons.play_arrow,
-              size: 36,
-            ),
+            child: Icon(isRunning ? Icons.pause : Icons.play_arrow, size: 36),
           ),
         ),
       ],

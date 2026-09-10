@@ -19,14 +19,23 @@ class TypeFilterChips extends StatelessWidget {
       children: [
         _chip('Todos', selected == null, () => onChanged(null)),
         const SizedBox(width: 8),
-        _chip('Tabata', selected == TimerType.tabata,
-            () => onChanged(TimerType.tabata)),
+        _chip(
+          'Tabata',
+          selected == TimerType.tabata,
+          () => onChanged(TimerType.tabata),
+        ),
         const SizedBox(width: 8),
-        _chip('Clásico', selected == TimerType.classic,
-            () => onChanged(TimerType.classic)),
+        _chip(
+          'Clásico',
+          selected == TimerType.classic,
+          () => onChanged(TimerType.classic),
+        ),
         const SizedBox(width: 8),
-        _chip('Personalizado', selected == TimerType.personalizado,
-            () => onChanged(TimerType.personalizado)),
+        _chip(
+          'Personalizado',
+          selected == TimerType.personalizado,
+          () => onChanged(TimerType.personalizado),
+        ),
       ],
     );
   }

@@ -14,31 +14,30 @@ class CustomSegment {
   });
 
   Map<String, dynamic> toJson() => {
-        'type': type.name,
-        'workSeconds': workSeconds,
-        'restSeconds': restSeconds,
-        'roundCount': roundCount,
-      };
+    'type': type.name,
+    'workSeconds': workSeconds,
+    'restSeconds': restSeconds,
+    'roundCount': roundCount,
+  };
 
   factory CustomSegment.fromJson(Map<String, dynamic> json) => CustomSegment(
-        type: TimerType.values.byName(json['type'] as String),
-        workSeconds: json['workSeconds'] as int,
-        restSeconds: json['restSeconds'] as int,
-        roundCount: json['roundCount'] as int,
-      );
+    type: TimerType.values.byName(json['type'] as String),
+    workSeconds: json['workSeconds'] as int,
+    restSeconds: json['restSeconds'] as int,
+    roundCount: json['roundCount'] as int,
+  );
 
   CustomSegment copyWith({
     TimerType? type,
     int? workSeconds,
     int? restSeconds,
     int? roundCount,
-  }) =>
-      CustomSegment(
-        type: type ?? this.type,
-        workSeconds: workSeconds ?? this.workSeconds,
-        restSeconds: restSeconds ?? this.restSeconds,
-        roundCount: roundCount ?? this.roundCount,
-      );
+  }) => CustomSegment(
+    type: type ?? this.type,
+    workSeconds: workSeconds ?? this.workSeconds,
+    restSeconds: restSeconds ?? this.restSeconds,
+    roundCount: roundCount ?? this.roundCount,
+  );
 }
 
 class CustomConfig {
@@ -53,27 +52,26 @@ class CustomConfig {
   });
 
   Map<String, dynamic> toJson() => {
-        'segments': segments.map((s) => s.toJson()).toList(),
-        'restBetweenSeconds': restBetweenSeconds,
-        'preparationSeconds': preparationSeconds,
-      };
+    'segments': segments.map((s) => s.toJson()).toList(),
+    'restBetweenSeconds': restBetweenSeconds,
+    'preparationSeconds': preparationSeconds,
+  };
 
   factory CustomConfig.fromJson(Map<String, dynamic> json) => CustomConfig(
-        segments: (json['segments'] as List)
-            .map((s) => CustomSegment.fromJson(s as Map<String, dynamic>))
-            .toList(),
-        restBetweenSeconds: json['restBetweenSeconds'] as int,
-        preparationSeconds: json['preparationSeconds'] as int,
-      );
+    segments: (json['segments'] as List)
+        .map((s) => CustomSegment.fromJson(s as Map<String, dynamic>))
+        .toList(),
+    restBetweenSeconds: json['restBetweenSeconds'] as int,
+    preparationSeconds: json['preparationSeconds'] as int,
+  );
 
   CustomConfig copyWith({
     List<CustomSegment>? segments,
     int? restBetweenSeconds,
     int? preparationSeconds,
-  }) =>
-      CustomConfig(
-        segments: segments ?? this.segments,
-        restBetweenSeconds: restBetweenSeconds ?? this.restBetweenSeconds,
-        preparationSeconds: preparationSeconds ?? this.preparationSeconds,
-      );
+  }) => CustomConfig(
+    segments: segments ?? this.segments,
+    restBetweenSeconds: restBetweenSeconds ?? this.restBetweenSeconds,
+    preparationSeconds: preparationSeconds ?? this.preparationSeconds,
+  );
 }

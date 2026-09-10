@@ -35,9 +35,7 @@ class PresetTile extends StatelessWidget {
                 color.withValues(alpha: 0.12),
               ],
             ),
-            border: Border.all(
-              color: color.withValues(alpha: 0.25),
-            ),
+            border: Border.all(color: color.withValues(alpha: 0.25)),
           ),
           child: Stack(
             children: [
@@ -64,11 +62,11 @@ class PresetTile extends StatelessWidget {
                         Expanded(
                           child: Text(
                             preset.name,
-                            style:
-                                Theme.of(context).textTheme.titleLarge?.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 20,
-                                    ),
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 20,
+                                ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -76,18 +74,20 @@ class PresetTile extends StatelessWidget {
                         const SizedBox(width: 12),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6),
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
                             '$totalMinutes min',
-                            style:
-                                Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: 16,
-                                    ),
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 16,
+                                ),
                           ),
                         ),
                       ],
@@ -98,7 +98,9 @@ class PresetTile extends StatelessWidget {
                       children: [
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 4),
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: color.withValues(alpha: 0.3),
                             borderRadius: BorderRadius.circular(8),
@@ -116,9 +118,7 @@ class PresetTile extends StatelessWidget {
                         Expanded(
                           child: Text(
                             summary,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
+                            style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(
                                   color: Colors.white.withValues(alpha: 0.7),
                                 ),
@@ -176,25 +176,26 @@ class PresetTile extends StatelessWidget {
     switch (preset.type) {
       case TimerType.classic:
         final c = preset.classicConfig!;
-        final total = c.preparationSeconds +
+        final total =
+            c.preparationSeconds +
             c.roundCount * c.roundSeconds +
             (c.roundCount > 1 ? (c.roundCount - 1) * c.restSeconds : 0);
         return (total / 60).ceil();
       case TimerType.tabata:
         final c = preset.tabataConfig!;
-        final total = c.preparationSeconds +
+        final total =
+            c.preparationSeconds +
             c.tabataCount *
                 (c.roundCount * c.workSeconds +
                     (c.roundCount - 1) * c.restSeconds) +
-            (c.tabataCount > 1
-                ? (c.tabataCount - 1) * c.tabataRestSeconds
-                : 0);
+            (c.tabataCount > 1 ? (c.tabataCount - 1) * c.tabataRestSeconds : 0);
         return (total / 60).ceil();
       case TimerType.personalizado:
         final c = preset.customConfig!;
         var total = c.preparationSeconds;
         for (final s in c.segments) {
-          total += s.roundCount * s.workSeconds +
+          total +=
+              s.roundCount * s.workSeconds +
               (s.roundCount > 1 ? (s.roundCount - 1) * s.restSeconds : 0);
         }
         if (c.segments.length > 1) {

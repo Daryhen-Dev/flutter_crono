@@ -50,18 +50,17 @@ class TimerState {
     int? totalPhaseSeconds,
     bool? isRunning,
     bool? isPaused,
-  }) =>
-      TimerState(
-        phase: phase ?? this.phase,
-        currentRound: currentRound ?? this.currentRound,
-        totalRounds: totalRounds ?? this.totalRounds,
-        currentTabata: currentTabata ?? this.currentTabata,
-        totalTabatas: totalTabatas ?? this.totalTabatas,
-        currentSegment: currentSegment ?? this.currentSegment,
-        totalSegments: totalSegments ?? this.totalSegments,
-        secondsRemaining: secondsRemaining ?? this.secondsRemaining,
-        totalPhaseSeconds: totalPhaseSeconds ?? this.totalPhaseSeconds,
-        isRunning: isRunning ?? this.isRunning,
-        isPaused: isPaused ?? this.isPaused,
-      );
+  }) => TimerState(
+    phase: phase ?? this.phase,
+    currentRound: currentRound ?? this.currentRound,
+    totalRounds: totalRounds ?? this.totalRounds,
+    currentTabata: currentTabata ?? this.currentTabata,
+    totalTabatas: totalTabatas ?? this.totalTabatas,
+    currentSegment: currentSegment ?? this.currentSegment,
+    totalSegments: totalSegments ?? this.totalSegments,
+    secondsRemaining: secondsRemaining ?? this.secondsRemaining,
+    totalPhaseSeconds: totalPhaseSeconds ?? this.totalPhaseSeconds,
+    isRunning: isRunning ?? this.isRunning,
+    isPaused: isPaused ?? this.isPaused,
+  );
 }

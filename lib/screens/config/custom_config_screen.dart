@@ -38,7 +38,8 @@ class _CustomConfigScreenState extends State<CustomConfigScreen> {
     int totalSeconds = provider.preparationSeconds;
     for (int i = 0; i < segments.length; i++) {
       final seg = segments[i];
-      totalSeconds += seg.roundCount * seg.workSeconds +
+      totalSeconds +=
+          seg.roundCount * seg.workSeconds +
           (seg.roundCount > 1 ? (seg.roundCount - 1) * seg.restSeconds : 0);
       if (i < segments.length - 1) {
         totalSeconds += provider.restBetweenSeconds;
@@ -104,16 +105,25 @@ class _CustomConfigScreenState extends State<CustomConfigScreen> {
                   children: [
                     // Segment header
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.work.withValues(alpha: 0.1),
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.dashboard_customize, color: AppColors.work, size: 20),
+                          Icon(
+                            Icons.dashboard_customize,
+                            color: AppColors.work,
+                            size: 20,
+                          ),
                           const SizedBox(width: 8),
-                          Text('Bloque ${index + 1}',
-                              style: Theme.of(context).textTheme.titleSmall),
+                          Text(
+                            'Bloque ${index + 1}',
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
                           const Spacer(),
                           IconButton(
                             icon: const Icon(Icons.close, size: 20),
@@ -134,8 +144,10 @@ class _CustomConfigScreenState extends State<CustomConfigScreen> {
                       onTap: () => _toggle(base),
                       child: _CenteredDurationPicker(
                         totalSeconds: segment.workSeconds,
-                        onChanged: (v) =>
-                            provider.updateSegment(index, segment.copyWith(workSeconds: v)),
+                        onChanged: (v) => provider.updateSegment(
+                          index,
+                          segment.copyWith(workSeconds: v),
+                        ),
                       ),
                     ),
                     _InnerConfigCard(
@@ -147,8 +159,10 @@ class _CustomConfigScreenState extends State<CustomConfigScreen> {
                       onTap: () => _toggle(base + 1),
                       child: _CenteredDurationPicker(
                         totalSeconds: segment.restSeconds,
-                        onChanged: (v) =>
-                            provider.updateSegment(index, segment.copyWith(restSeconds: v)),
+                        onChanged: (v) => provider.updateSegment(
+                          index,
+                          segment.copyWith(restSeconds: v),
+                        ),
                       ),
                     ),
                     _InnerConfigCard(
@@ -160,8 +174,10 @@ class _CustomConfigScreenState extends State<CustomConfigScreen> {
                       onTap: () => _toggle(base + 2),
                       child: _CenteredCounterPicker(
                         value: segment.roundCount,
-                        onChanged: (v) =>
-                            provider.updateSegment(index, segment.copyWith(roundCount: v.clamp(1, 99))),
+                        onChanged: (v) => provider.updateSegment(
+                          index,
+                          segment.copyWith(roundCount: v.clamp(1, 99)),
+                        ),
                       ),
                     ),
                   ],
@@ -217,14 +233,14 @@ class _CustomConfigScreenState extends State<CustomConfigScreen> {
               if (name.isEmpty) return;
               final config = context.read<CustomConfigProvider>().config;
               context.read<PresetsProvider>().add(
-                    name: name,
-                    type: TimerType.personalizado,
-                    config: config.toJson(),
-                  );
-              Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Rutina guardada')),
+                name: name,
+                type: TimerType.personalizado,
+                config: config.toJson(),
               );
+              Navigator.pop(ctx);
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Rutina guardada')));
             },
             child: const Text('Guardar'),
           ),
@@ -265,9 +281,7 @@ class _ConfigCard extends StatelessWidget {
             onTap: onTap,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
-              ),
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.1)),
               child: Row(
                 children: [
                   Icon(icon, color: color, size: 28),
@@ -278,16 +292,17 @@ class _ConfigCard extends StatelessWidget {
                       children: [
                         Text(
                           label,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                fontSize: 16,
-                                color: color,
-                              ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(fontSize: 16, color: color),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           value,
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                fontFeatures: [const FontFeature.tabularFigures()],
+                          style: Theme.of(context).textTheme.headlineSmall
+                              ?.copyWith(
+                                fontFeatures: [
+                                  const FontFeature.tabularFigures(),
+                                ],
                               ),
                         ),
                       ],
@@ -296,10 +311,7 @@ class _ConfigCard extends StatelessWidget {
                   AnimatedRotation(
                     turns: isExpanded ? 0.5 : 0,
                     duration: const Duration(milliseconds: 200),
-                    child: Icon(
-                      Icons.keyboard_arrow_down,
-                      color: color,
-                    ),
+                    child: Icon(Icons.keyboard_arrow_down, color: color),
                   ),
                 ],
               ),
@@ -361,16 +373,16 @@ class _InnerConfigCard extends StatelessWidget {
                     children: [
                       Text(
                         label,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: color,
-                            ),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.copyWith(color: color),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         value,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontFeatures: [const FontFeature.tabularFigures()],
-                            ),
+                          fontFeatures: [const FontFeature.tabularFigures()],
+                        ),
                       ),
                     ],
                   ),
@@ -456,8 +468,8 @@ class _CenteredDurationPickerState extends State<_CenteredDurationPicker> {
   @override
   Widget build(BuildContext context) {
     final baseStyle = Theme.of(context).textTheme.headlineSmall?.copyWith(
-          fontFeatures: [const FontFeature.tabularFigures()],
-        );
+      fontFeatures: [const FontFeature.tabularFigures()],
+    );
     final dimStyle = baseStyle?.copyWith(color: AppColors.textDim);
     final brightStyle = baseStyle?.copyWith(color: AppColors.textPrimary);
 
@@ -522,34 +534,29 @@ class _CenteredDurationPickerState extends State<_CenteredDurationPicker> {
 class _CenteredCounterPicker extends StatefulWidget {
   final int value;
   final ValueChanged<int> onChanged;
-  final int min;
-  final int max;
 
-  const _CenteredCounterPicker({
-    required this.value,
-    required this.onChanged,
-    this.min = 1,
-    this.max = 99,
-  });
+  const _CenteredCounterPicker({required this.value, required this.onChanged});
 
   @override
   State<_CenteredCounterPicker> createState() => _CenteredCounterPickerState();
 }
 
 class _CenteredCounterPickerState extends State<_CenteredCounterPicker> {
+  static const _min = 1;
+  static const _max = 99;
   late FixedExtentScrollController _ctrl;
 
   @override
   void initState() {
     super.initState();
-    _ctrl = FixedExtentScrollController(initialItem: widget.value - widget.min);
+    _ctrl = FixedExtentScrollController(initialItem: widget.value - _min);
   }
 
   @override
   void didUpdateWidget(_CenteredCounterPicker old) {
     super.didUpdateWidget(old);
     if (old.value != widget.value) {
-      final target = widget.value - widget.min;
+      final target = widget.value - _min;
       if (_ctrl.selectedItem != target) _ctrl.jumpToItem(target);
     }
   }
@@ -563,11 +570,11 @@ class _CenteredCounterPickerState extends State<_CenteredCounterPicker> {
   @override
   Widget build(BuildContext context) {
     final baseStyle = Theme.of(context).textTheme.headlineSmall?.copyWith(
-          fontFeatures: [const FontFeature.tabularFigures()],
-        );
+      fontFeatures: [const FontFeature.tabularFigures()],
+    );
     final dimStyle = baseStyle?.copyWith(color: AppColors.textDim);
     final brightStyle = baseStyle?.copyWith(color: AppColors.textPrimary);
-    final itemCount = widget.max - widget.min + 1;
+    const itemCount = _max - _min + 1;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -583,12 +590,12 @@ class _CenteredCounterPickerState extends State<_CenteredCounterPicker> {
             physics: const FixedExtentScrollPhysics(),
             overAndUnderCenterOpacity: 0.3,
             onSelectedItemChanged: (index) {
-              widget.onChanged(index + widget.min);
+              widget.onChanged(index + _min);
             },
             childDelegate: ListWheelChildBuilderDelegate(
               childCount: itemCount,
               builder: (context, index) {
-                final val = index + widget.min;
+                final val = index + _min;
                 final isSelected =
                     _ctrl.hasClients && _ctrl.selectedItem == index;
                 return Center(
@@ -618,18 +625,12 @@ class _TotalTimeBanner extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.accent.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.accent.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: AppColors.accent.withValues(alpha: 0.2)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.schedule,
-            color: AppColors.accent,
-            size: 28,
-          ),
+          Icon(Icons.schedule, color: AppColors.accent, size: 28),
           const SizedBox(width: 14),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -647,10 +648,10 @@ class _TotalTimeBanner extends StatelessWidget {
               Text(
                 formattedTime,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: AppColors.accent,
-                      fontWeight: FontWeight.w800,
-                      fontFeatures: [const FontFeature.tabularFigures()],
-                    ),
+                  color: AppColors.accent,
+                  fontWeight: FontWeight.w800,
+                  fontFeatures: [const FontFeature.tabularFigures()],
+                ),
               ),
             ],
           ),

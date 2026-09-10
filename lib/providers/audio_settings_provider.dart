@@ -7,7 +7,7 @@ class AudioSettingsProvider extends ChangeNotifier {
   AudioSettings _settings;
 
   AudioSettingsProvider(this._storage)
-      : _settings = _storage.loadAudioSettings();
+    : _settings = _storage.loadAudioSettings();
 
   AudioSettings get settings => _settings;
 

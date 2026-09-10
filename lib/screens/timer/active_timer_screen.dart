@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../models/timer_type.dart';
 import '../../models/timer_phase.dart';
 import '../../models/timer_skin.dart';
@@ -28,6 +29,7 @@ class _ActiveTimerScreenState extends State<ActiveTimerScreen> {
   @override
   void initState() {
     super.initState();
+    WakelockPlus.enable();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final timerProvider = context.read<TimerProvider>();
       final audioSettings = context.read<AudioSettingsProvider>().settings;
@@ -57,6 +59,7 @@ class _ActiveTimerScreenState extends State<ActiveTimerScreen> {
         context.read<HistoryProvider>().add(record);
       }
       timerProvider.stop();
+      WakelockPlus.disable();
       context.pop();
     }
 
@@ -69,23 +72,23 @@ class _ActiveTimerScreenState extends State<ActiveTimerScreen> {
         body: SafeArea(
           child: switch (skin) {
             TimerSkin.classic => ClassicSkin(
-                timerState: timerState,
-                onPause: context.read<TimerProvider>().pause,
-                onResume: context.read<TimerProvider>().resume,
-                onStop: onStop,
-              ),
+              timerState: timerState,
+              onPause: context.read<TimerProvider>().pause,
+              onResume: context.read<TimerProvider>().resume,
+              onStop: onStop,
+            ),
             TimerSkin.cyberGrid => CyberGridSkin(
-                timerState: timerState,
-                onPause: context.read<TimerProvider>().pause,
-                onResume: context.read<TimerProvider>().resume,
-                onStop: onStop,
-              ),
+              timerState: timerState,
+              onPause: context.read<TimerProvider>().pause,
+              onResume: context.read<TimerProvider>().resume,
+              onStop: onStop,
+            ),
             TimerSkin.terminal => TerminalSkin(
-                timerState: timerState,
-                onPause: context.read<TimerProvider>().pause,
-                onResume: context.read<TimerProvider>().resume,
-                onStop: onStop,
-              ),
+              timerState: timerState,
+              onPause: context.read<TimerProvider>().pause,
+              onResume: context.read<TimerProvider>().resume,
+              onStop: onStop,
+            ),
           },
         ),
       ),
@@ -97,6 +100,7 @@ class _ActiveTimerScreenState extends State<ActiveTimerScreen> {
     if (timerProvider.state.phase == TimerPhase.finished ||
         timerProvider.state.phase == TimerPhase.idle) {
       timerProvider.stop();
+      WakelockPlus.disable();
       context.pop();
       return;
     }
@@ -114,6 +118,7 @@ class _ActiveTimerScreenState extends State<ActiveTimerScreen> {
             onPressed: () {
               Navigator.pop(ctx);
               timerProvider.stop();
+              WakelockPlus.disable();
               context.pop();
             },
             child: const Text('Salir'),

@@ -23,8 +23,11 @@ class PresetsScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.bookmark_border,
-                      size: 64, color: AppColors.textDim),
+                  const Icon(
+                    Icons.bookmark_border,
+                    size: 64,
+                    color: AppColors.textDim,
+                  ),
                   const SizedBox(height: 16),
                   Text(
                     'Sin rutinas guardadas',
@@ -43,21 +46,22 @@ class PresetsScreen extends StatelessWidget {
                   onTap: () {
                     // Load config and go straight to timer
                     if (preset.type == TimerType.classic) {
-                      context
-                          .read<ClassicConfigProvider>()
-                          .loadConfig(preset.classicConfig!);
+                      context.read<ClassicConfigProvider>().loadConfig(
+                        preset.classicConfig!,
+                      );
                     } else if (preset.type == TimerType.personalizado) {
-                      context
-                          .read<CustomConfigProvider>()
-                          .loadConfig(preset.customConfig!);
+                      context.read<CustomConfigProvider>().loadConfig(
+                        preset.customConfig!,
+                      );
                     } else {
-                      context
-                          .read<TabataConfigProvider>()
-                          .loadConfig(preset.tabataConfig!);
+                      context.read<TabataConfigProvider>().loadConfig(
+                        preset.tabataConfig!,
+                      );
                     }
                     context.push('/timer', extra: preset.type);
                   },
-                  onDelete: () => _confirmDelete(context, preset.id, preset.name),
+                  onDelete: () =>
+                      _confirmDelete(context, preset.id, preset.name),
                 );
               },
             ),

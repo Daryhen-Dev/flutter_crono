@@ -22,10 +22,9 @@ class WorkoutDayGroup extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
           child: Text(
             label,
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(color: AppColors.textSecondary),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(color: AppColors.textSecondary),
           ),
         ),
         ...records.map((r) => WorkoutRecordTile(record: r)),

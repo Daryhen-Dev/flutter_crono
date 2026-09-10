@@ -26,16 +26,16 @@ class AudioSettings {
   }
 
   Map<String, dynamic> toJson() => {
-        'workMusic': workMusic,
-        'restMusic': restMusic,
-        'startTone': startTone,
-        'endTone': endTone,
-      };
+    'workMusic': workMusic,
+    'restMusic': restMusic,
+    'startTone': startTone,
+    'endTone': endTone,
+  };
 
   factory AudioSettings.fromJson(Map<String, dynamic> json) => AudioSettings(
-        workMusic: json['workMusic'] as String?,
-        restMusic: json['restMusic'] as String?,
-        startTone: json['startTone'] as String? ?? 'default',
-        endTone: json['endTone'] as String? ?? 'default',
-      );
+    workMusic: json['workMusic'] as String?,
+    restMusic: json['restMusic'] as String?,
+    startTone: json['startTone'] as String? ?? 'default',
+    endTone: json['endTone'] as String? ?? 'default',
+  );
 }

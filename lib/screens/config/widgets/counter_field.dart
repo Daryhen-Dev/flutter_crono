@@ -25,12 +25,16 @@ class CounterField extends StatelessWidget {
         children: [
           if (label.isNotEmpty)
             Expanded(
-              child: Text(label, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 18)),
+              child: Text(
+                label,
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontSize: 18),
+              ),
             ),
           if (label.isEmpty) const Spacer(),
           IconButton(
-            onPressed:
-                value > min ? () => onChanged(value - 1) : null,
+            onPressed: value > min ? () => onChanged(value - 1) : null,
             icon: const Icon(Icons.remove_circle_outline, size: 28),
             color: AppColors.textSecondary,
           ),
@@ -43,8 +47,7 @@ class CounterField extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed:
-                value < max ? () => onChanged(value + 1) : null,
+            onPressed: value < max ? () => onChanged(value + 1) : null,
             icon: const Icon(Icons.add_circle_outline, size: 28),
             color: AppColors.textSecondary,
           ),

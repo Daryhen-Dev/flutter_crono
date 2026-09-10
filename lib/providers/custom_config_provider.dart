@@ -7,10 +7,10 @@ class CustomConfigProvider extends ChangeNotifier {
   int _preparationSeconds = 10;
 
   CustomConfig get config => CustomConfig(
-        segments: List.unmodifiable(_segments),
-        restBetweenSeconds: _restBetweenSeconds,
-        preparationSeconds: _preparationSeconds,
-      );
+    segments: List.unmodifiable(_segments),
+    restBetweenSeconds: _restBetweenSeconds,
+    preparationSeconds: _preparationSeconds,
+  );
 
   List<CustomSegment> get segments => List.unmodifiable(_segments);
   int get restBetweenSeconds => _restBetweenSeconds;

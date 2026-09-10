@@ -26,14 +26,18 @@ class HistoryProvider extends ChangeNotifier {
   }
 
   List<WorkoutRecord> getByPeriod(DateTime start, DateTime end) {
-    return _records.where((r) =>
-        !r.completedAt.isBefore(start) && r.completedAt.isBefore(end)).toList();
+    return _records
+        .where(
+          (r) => !r.completedAt.isBefore(start) && r.completedAt.isBefore(end),
+        )
+        .toList();
   }
 
   List<WorkoutRecord> getWeek(DateTime referenceDate) {
     // Monday of the week
     final monday = referenceDate.subtract(
-        Duration(days: referenceDate.weekday - 1));
+      Duration(days: referenceDate.weekday - 1),
+    );
     final start = DateTime(monday.year, monday.month, monday.day);
     final end = start.add(const Duration(days: 7));
     return getByPeriod(start, end);
@@ -53,8 +57,10 @@ class HistoryProvider extends ChangeNotifier {
 
   Map<String, dynamic> getSummary(List<WorkoutRecord> filtered) {
     final totalSessions = filtered.length;
-    final totalSeconds =
-        filtered.fold<int>(0, (sum, r) => sum + r.totalSeconds);
+    final totalSeconds = filtered.fold<int>(
+      0,
+      (sum, r) => sum + r.totalSeconds,
+    );
     final avgSeconds = totalSessions > 0 ? totalSeconds ~/ totalSessions : 0;
     return {
       'totalSessions': totalSessions,
@@ -64,7 +70,9 @@ class HistoryProvider extends ChangeNotifier {
   }
 
   static List<WorkoutRecord> filterByType(
-      List<WorkoutRecord> records, TimerType? type) {
+    List<WorkoutRecord> records,
+    TimerType? type,
+  ) {
     if (type == null) return records;
     return records.where((r) => r.type == type).toList();
   }

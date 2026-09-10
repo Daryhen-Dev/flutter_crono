@@ -12,29 +12,28 @@ class ClassicConfig {
   });
 
   Map<String, dynamic> toJson() => {
-        'preparationSeconds': preparationSeconds,
-        'roundSeconds': roundSeconds,
-        'restSeconds': restSeconds,
-        'roundCount': roundCount,
-      };
+    'preparationSeconds': preparationSeconds,
+    'roundSeconds': roundSeconds,
+    'restSeconds': restSeconds,
+    'roundCount': roundCount,
+  };
 
   factory ClassicConfig.fromJson(Map<String, dynamic> json) => ClassicConfig(
-        preparationSeconds: json['preparationSeconds'] as int,
-        roundSeconds: json['roundSeconds'] as int,
-        restSeconds: json['restSeconds'] as int,
-        roundCount: json['roundCount'] as int,
-      );
+    preparationSeconds: json['preparationSeconds'] as int,
+    roundSeconds: json['roundSeconds'] as int,
+    restSeconds: json['restSeconds'] as int,
+    roundCount: json['roundCount'] as int,
+  );
 
   ClassicConfig copyWith({
     int? preparationSeconds,
     int? roundSeconds,
     int? restSeconds,
     int? roundCount,
-  }) =>
-      ClassicConfig(
-        preparationSeconds: preparationSeconds ?? this.preparationSeconds,
-        roundSeconds: roundSeconds ?? this.roundSeconds,
-        restSeconds: restSeconds ?? this.restSeconds,
-        roundCount: roundCount ?? this.roundCount,
-      );
+  }) => ClassicConfig(
+    preparationSeconds: preparationSeconds ?? this.preparationSeconds,
+    roundSeconds: roundSeconds ?? this.roundSeconds,
+    restSeconds: restSeconds ?? this.restSeconds,
+    roundCount: roundCount ?? this.roundCount,
+  );
 }

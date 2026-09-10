@@ -283,7 +283,10 @@ class TimerProvider extends ChangeNotifier {
     final int roundsCompleted;
     final int tabatasCompleted;
     if (_type == TimerType.personalizado) {
-      roundsCompleted = _customConfig!.segments.fold(0, (sum, s) => sum + s.roundCount);
+      roundsCompleted = _customConfig!.segments.fold(
+        0,
+        (sum, s) => sum + s.roundCount,
+      );
       tabatasCompleted = _customConfig!.segments.length;
     } else {
       roundsCompleted = _state.totalRounds;

@@ -59,8 +59,8 @@ class _DurationFieldState extends State<DurationField> {
   @override
   Widget build(BuildContext context) {
     final baseStyle = Theme.of(context).textTheme.headlineSmall?.copyWith(
-          fontFeatures: [const FontFeature.tabularFigures()],
-        );
+      fontFeatures: [const FontFeature.tabularFigures()],
+    );
     final dimStyle = baseStyle?.copyWith(color: AppColors.textDim);
     final brightStyle = baseStyle?.copyWith(color: AppColors.textPrimary);
 
@@ -70,8 +70,12 @@ class _DurationFieldState extends State<DurationField> {
         children: [
           if (widget.label.isNotEmpty)
             Expanded(
-              child:
-                  Text(widget.label, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 18)),
+              child: Text(
+                widget.label,
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontSize: 18),
+              ),
             ),
           if (widget.label.isEmpty) const Spacer(),
           _buildWheel(
@@ -115,8 +119,8 @@ class _DurationFieldState extends State<DurationField> {
         childDelegate: ListWheelChildBuilderDelegate(
           childCount: itemCount,
           builder: (context, index) {
-            final isSelected = controller.hasClients &&
-                controller.selectedItem == index;
+            final isSelected =
+                controller.hasClients && controller.selectedItem == index;
             return Center(
               child: Text(
                 index.toString().padLeft(2, '0'),

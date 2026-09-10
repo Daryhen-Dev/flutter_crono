@@ -75,10 +75,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          textStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-          ),
+          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -92,9 +89,7 @@ class AppTheme {
         ),
       ),
       iconButtonTheme: IconButtonThemeData(
-        style: IconButton.styleFrom(
-          foregroundColor: AppColors.textPrimary,
-        ),
+        style: IconButton.styleFrom(foregroundColor: AppColors.textPrimary),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -138,9 +133,7 @@ class AppTheme {
       snackBarTheme: SnackBarThemeData(
         backgroundColor: AppColors.surfaceLight,
         contentTextStyle: const TextStyle(color: AppColors.textPrimary),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         behavior: SnackBarBehavior.floating,
       ),
       textTheme: base.textTheme.copyWith(
@@ -213,9 +206,7 @@ class AppTheme {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(
-            color: CyberColors.cyan.withValues(alpha: 0.3),
-          ),
+          side: BorderSide(color: CyberColors.cyan.withValues(alpha: 0.3)),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -226,18 +217,13 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          textStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: CyberColors.cyan,
-          side: BorderSide(
-            color: CyberColors.cyan.withValues(alpha: 0.4),
-          ),
+          side: BorderSide(color: CyberColors.cyan.withValues(alpha: 0.4)),
           minimumSize: const Size(double.infinity, 56),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -245,9 +231,7 @@ class AppTheme {
         ),
       ),
       iconButtonTheme: IconButtonThemeData(
-        style: IconButton.styleFrom(
-          foregroundColor: CyberColors.cyan,
-        ),
+        style: IconButton.styleFrom(foregroundColor: CyberColors.cyan),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -278,18 +262,14 @@ class AppTheme {
         backgroundColor: CyberColors.background,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(
-            color: CyberColors.cyan.withValues(alpha: 0.3),
-          ),
+          side: BorderSide(color: CyberColors.cyan.withValues(alpha: 0.3)),
         ),
       ),
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: CyberColors.background,
         shape: RoundedRectangleBorder(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-          side: BorderSide(
-            color: CyberColors.cyan.withValues(alpha: 0.3),
-          ),
+          side: BorderSide(color: CyberColors.cyan.withValues(alpha: 0.3)),
         ),
       ),
       listTileTheme: const ListTileThemeData(
@@ -358,9 +338,7 @@ class AppTheme {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
-          side: BorderSide(
-            color: TerminalColors.green.withValues(alpha: 0.4),
-          ),
+          side: BorderSide(color: TerminalColors.green.withValues(alpha: 0.4)),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -382,22 +360,14 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: TerminalColors.green,
-          side: BorderSide(
-            color: TerminalColors.green.withValues(alpha: 0.5),
-          ),
+          side: BorderSide(color: TerminalColors.green.withValues(alpha: 0.5)),
           minimumSize: const Size(double.infinity, 56),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
-          ),
-          textStyle: const TextStyle(
-            fontFamily: 'monospace',
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          textStyle: const TextStyle(fontFamily: 'monospace'),
         ),
       ),
       iconButtonTheme: IconButtonThemeData(
-        style: IconButton.styleFrom(
-          foregroundColor: TerminalColors.green,
-        ),
+        style: IconButton.styleFrom(foregroundColor: TerminalColors.green),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -431,18 +401,14 @@ class AppTheme {
         backgroundColor: TerminalColors.background,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
-          side: BorderSide(
-            color: TerminalColors.green.withValues(alpha: 0.4),
-          ),
+          side: BorderSide(color: TerminalColors.green.withValues(alpha: 0.4)),
         ),
       ),
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: TerminalColors.background,
         shape: RoundedRectangleBorder(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
-          side: BorderSide(
-            color: TerminalColors.green.withValues(alpha: 0.4),
-          ),
+          side: BorderSide(color: TerminalColors.green.withValues(alpha: 0.4)),
         ),
       ),
       listTileTheme: const ListTileThemeData(

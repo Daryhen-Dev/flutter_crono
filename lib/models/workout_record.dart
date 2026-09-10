@@ -22,24 +22,24 @@ class WorkoutRecord {
   });
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'type': type.name,
-        'startedAt': startedAt.toIso8601String(),
-        'completedAt': completedAt.toIso8601String(),
-        'totalSeconds': totalSeconds,
-        'roundsCompleted': roundsCompleted,
-        'tabatasCompleted': tabatasCompleted,
-        'configJson': configJson,
-      };
+    'id': id,
+    'type': type.name,
+    'startedAt': startedAt.toIso8601String(),
+    'completedAt': completedAt.toIso8601String(),
+    'totalSeconds': totalSeconds,
+    'roundsCompleted': roundsCompleted,
+    'tabatasCompleted': tabatasCompleted,
+    'configJson': configJson,
+  };
 
   factory WorkoutRecord.fromJson(Map<String, dynamic> json) => WorkoutRecord(
-        id: json['id'] as String,
-        type: TimerType.values.byName(json['type'] as String),
-        startedAt: DateTime.parse(json['startedAt'] as String),
-        completedAt: DateTime.parse(json['completedAt'] as String),
-        totalSeconds: json['totalSeconds'] as int,
-        roundsCompleted: json['roundsCompleted'] as int,
-        tabatasCompleted: json['tabatasCompleted'] as int,
-        configJson: json['configJson'] as String,
-      );
+    id: json['id'] as String,
+    type: TimerType.values.byName(json['type'] as String),
+    startedAt: DateTime.parse(json['startedAt'] as String),
+    completedAt: DateTime.parse(json['completedAt'] as String),
+    totalSeconds: json['totalSeconds'] as int,
+    roundsCompleted: json['roundsCompleted'] as int,
+    tabatasCompleted: json['tabatasCompleted'] as int,
+    configJson: json['configJson'] as String,
+  );
 }
