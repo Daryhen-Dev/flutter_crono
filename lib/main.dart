@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
 import 'models/timer_skin.dart';
@@ -12,6 +13,9 @@ import 'providers/tabata_config_provider.dart';
 import 'providers/custom_config_provider.dart';
 import 'providers/timer_provider.dart';
 import 'providers/history_provider.dart';
+import 'providers/running_history_provider.dart';
+import 'providers/running_provider.dart';
+import 'providers/running_settings_provider.dart';
 import 'providers/skin_provider.dart';
 import 'providers/audio_settings_provider.dart';
 
@@ -19,6 +23,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   final storage = StorageService(prefs);
+
+  // Enable wakelock for long timers
+  WakelockPlus.enable();
 
   runApp(CronoApp(storage: storage));
 }
@@ -38,6 +45,9 @@ class CronoApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CustomConfigProvider()),
         ChangeNotifierProvider(create: (_) => TimerProvider()),
         ChangeNotifierProvider(create: (_) => HistoryProvider(storage)),
+        ChangeNotifierProvider(create: (_) => RunningProvider()),
+        ChangeNotifierProvider(create: (_) => RunningHistoryProvider(storage)),
+        ChangeNotifierProvider(create: (_) => RunningSettingsProvider(storage)),
         ChangeNotifierProvider(create: (_) => SkinProvider(storage)),
         ChangeNotifierProvider(create: (_) => AudioSettingsProvider(storage)),
       ],
@@ -90,10 +100,9 @@ class _SkinShell extends StatelessWidget {
         child: Stack(
           children: [
             if (skin == TimerSkin.cyberGrid)
-              Positioned.fill(
-                child: CustomPaint(painter: _GridPainter()),
-              ),
-            if (skin == TimerSkin.terminal) const Positioned.fill(child: _MatrixRain()),
+              Positioned.fill(child: CustomPaint(painter: _GridPainter())),
+            if (skin == TimerSkin.terminal)
+              const Positioned.fill(child: _MatrixRain()),
             child,
           ],
         ),
@@ -169,16 +178,18 @@ class _MatrixRainState extends State<_MatrixRain>
     final count = (size.width / colWidth).ceil();
 
     for (int i = 0; i < count; i++) {
-      _columns.add(_RainColumn(
-        x: i * colWidth,
-        speed: 1.0 + _random.nextDouble() * 2.5,
-        y: -_random.nextDouble() * size.height * 2,
-        length: 8 + _random.nextInt(18),
-        chars: List.generate(
-          8 + _random.nextInt(18),
-          (_) => _chars[_random.nextInt(_chars.length)],
+      _columns.add(
+        _RainColumn(
+          x: i * colWidth,
+          speed: 1.0 + _random.nextDouble() * 2.5,
+          y: -_random.nextDouble() * size.height * 2,
+          length: 8 + _random.nextInt(18),
+          chars: List.generate(
+            8 + _random.nextInt(18),
+            (_) => _chars[_random.nextInt(_chars.length)],
+          ),
         ),
-      ));
+      );
     }
   }
 

@@ -8,6 +8,13 @@ import '../../screens/timer/active_timer_screen.dart';
 import '../../screens/presets/presets_screen.dart';
 import '../../screens/history/history_screen.dart';
 import '../../screens/audio/audio_settings_screen.dart';
+import '../../models/running_session.dart';
+import '../../screens/running/running_active_screen.dart';
+import '../../screens/running/running_dashboard_screen.dart';
+import '../../screens/running/running_history_screen.dart';
+import '../../screens/running/running_route_detail_screen.dart';
+import '../../screens/running/running_settings_screen.dart';
+import '../../screens/running/running_summary_screen.dart';
 
 class AppRouter {
   AppRouter._();
@@ -15,10 +22,7 @@ class AppRouter {
   static final router = GoRouter(
     initialLocation: '/',
     routes: [
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const HomeScreen(),
-      ),
+      GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
       GoRoute(
         path: '/classic/config',
         builder: (context, state) => const ClassicConfigScreen(),
@@ -49,6 +53,32 @@ class AppRouter {
       GoRoute(
         path: '/audio-settings',
         builder: (context, state) => const AudioSettingsScreen(),
+      ),
+      GoRoute(
+        path: '/running',
+        builder: (context, state) => const RunningDashboardScreen(),
+      ),
+      GoRoute(
+        path: '/running/active',
+        builder: (context, state) => const RunningActiveScreen(),
+      ),
+      GoRoute(
+        path: '/running/summary',
+        builder: (context, state) =>
+            RunningSummaryScreen(session: state.extra as RunningSession),
+      ),
+      GoRoute(
+        path: '/running/history',
+        builder: (context, state) => const RunningHistoryScreen(),
+      ),
+      GoRoute(
+        path: '/running/settings',
+        builder: (context, state) => const RunningSettingsScreen(),
+      ),
+      GoRoute(
+        path: '/running/route',
+        builder: (context, state) =>
+            RunningRouteDetailScreen(session: state.extra as RunningSession),
       ),
     ],
   );

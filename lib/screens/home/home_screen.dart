@@ -37,8 +37,8 @@ class HomeScreen extends StatelessWidget {
                   Text(
                     'Tip Tap Workout',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const Spacer(),
                   _TopBarButton(
@@ -85,6 +85,14 @@ class HomeScreen extends StatelessWidget {
                 icon: Icons.tune,
                 color: AppColors.preparation,
                 onTap: () => context.push('/custom/config'),
+              ),
+              const SizedBox(height: 12),
+              _ModeCard(
+                title: 'Running',
+                subtitle: 'GPS, ritmo, mapa y auto-pausa',
+                icon: Icons.directions_run,
+                color: AppColors.accent,
+                onTap: () => context.push('/running'),
               ),
               const Spacer(),
               // Bottom actions
@@ -228,15 +236,9 @@ class _ModeCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
+                  Text(title, style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(height: 3),
-                  Text(
-                    subtitle,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
+                  Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
                 ],
               ),
             ),
@@ -289,9 +291,9 @@ class _ActionCard extends StatelessWidget {
             Text(
               label,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: AppColors.textPrimary,
-                    fontSize: 14,
-                  ),
+                color: AppColors.textPrimary,
+                fontSize: 14,
+              ),
             ),
           ],
         ),
